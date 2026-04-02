@@ -3,14 +3,14 @@ resource "kubernetes_deployment" "this" {
   depends_on = [kubernetes_namespace.this]
 
   metadata {
-    name = var.deployment_name
+    name      = var.deployment_name
     namespace = var.namespace_name
     labels    = var.labels
 
   }
 
   spec {
-    replicas= var.replicas
+    replicas = var.replicas
     selector {
       match_labels = var.labels
     }
@@ -27,10 +27,21 @@ resource "kubernetes_deployment" "this" {
           port {
             container_port = var.container_port
           }
+
+          resources {
+            limits = {
+              cpu    = "500m"
+              memory = "256Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "128Mi"
+            }
+          }
         }
       }
     }
 
   }
-  
+
 }
